@@ -9,3 +9,39 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Keyword {
+  id                                BigInt              @id @default(autoincrement())
+  keyword                           Json
+  is_new                            Boolean
+  description_by_commitee           String
+  picture                           String
+  equation                          String
+  approved_date_by_commitee         DateTime
+  description_by_councile           DateTime
+  finally_approvied_date_by_council DateTime
+  Attributes                        Attributes?         @relation(fields: [attributesId], references: [id])
+  attributesId                      Int?
+  Responsible_People                Responsible_People? @relation(fields: [responsible_PeopleId], references: [id])
+  responsible_PeopleId              Int?
+}
+
+model Attributes {
+  id             Int       @id @default(autoincrement())
+  attribute_name String
+  Keyword        Keyword[]
+}
+
+model Responsible_People {
+  id               Int       @id @default(autoincrement())
+  responsible_name String
+  Keyword          Keyword[]
+}
+
+model user {
+  id        Int     @id @default(autoincrement())
+  fullname  String
+  hash      String
+  salt      String
+  is_active Boolean @default(true)
+}
