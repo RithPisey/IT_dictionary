@@ -11,6 +11,7 @@ export class Application {
 	private setConfig() {
 		this._app.use(express.json());
 		this._app.use(express.urlencoded({ extended: true }));
+		this._app.use("/api");
 	}
 
 	private routController() {}
