@@ -1,0 +1,120 @@
+<% let title = "Add New Word"; %>
+<%- include("partials/header"); %>
+<%- include("partials/nav",{title:"Add New Word"}); %>
+<div class="container" id="frm-add">
+    <div class="text-left mt-2 mb-3">
+        <h4><%=title%></h4>
+    </div>
+    <form action="/add-new-word" method="post">
+        <div class="row d-flex">
+            <div class="col-sm-10 text-start">
+                <div class="form-group mb-3">
+                    <div class="row d-flex">
+                        <div class="col-sm-4">
+                            <label for="">ពាក្យខ្មែរ</label>
+                            <input type="text" name="kh_word" class="form-control">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="">ថ្នាក់ពាក្យ</label>
+                            <select name="att" class="form-select">
+                                <option value="noun">នាម</option>
+                                <option value="adj">គុណនាម</option>
+                                <option value="verb">កិរិយា</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 mt-4">
+                            <div class="mt-1">
+                                <input value="true" checked  type="checkbox" name="is_new">
+                                <label for="">ពាក្យថ្មី</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <div class="row d-flex">
+                        <div class="col-sm-4">
+                            <label for="">ពាក្យអង់គ្លេស</label>
+                            <input name="eng_word" type="text" class="form-control">
+                        </div>
+                        <div class="col-sm-5">
+                            <label for="">អ្នកទទួលខុសត្រូវ</label>
+                            <select name="res_person" class="form-select">
+                                <option value="sengdy">
+                                    សេងឌី
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <div class="row d-flex">
+                        <div class="col-sm-4">
+                            <label for="">ពាក្យបារាំង</label>
+                            <input name="fr_word" type="text" class="form-control">
+                        </div>
+                        <div class="col-sm-8">
+                            <label for="">ការពន្យល់</label>
+                            <textarea name="explian" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <div class="row d-flex">
+                        <div class="col-sm-4">
+                            <label for="">កាលបរិច្ឆេទទទួលស្គាលដោយគណកម្មការ</label>
+                            <input type="date" name="approved_date_by_commitee" class="form-control">
+                        </div>
+                        <div class="col-sm-8">
+                            <label for="">ការពិព័ណ៌នាដោយគណកម្មការ</label>
+                            <textarea name="desc_by_commitee" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <div class="row d-flex">
+                        <div class="col-sm-4">
+                            <label for="">កាលបរិច្ឆេទទទួលស្គាលដោយក្រុមព្រឹក្សាចុងក្រោយ</label>
+                            <input name="final_approve_date_by_council" type="date" class="form-control">
+                        </div>
+                        <div class="col-sm-8">
+                            <label for="">ការពិព័ណ៌នាដោយក្រុមព្រឹក្សា</label>
+                            <textarea name="desc_by_council" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 text-center">
+                <div class="for-img text-center">
+                    <div class="label">
+                        <label for="" class="img_label"></label>
+                    </div>
+                    <label for="file" id="file-img">
+                        <div class="inp-img text-center">
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24" style="fill: #2835A8;">
+                                    <path d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5h11c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888zM13 14v3h-2v-3H8l4-5 4 5h-3z">
+                                    </path>
+                                </svg>
+                                <div class="drop-title">
+                                    <p id="okay">Drag Or Drop Your File(s)<br>Here To Upload</p>
+                                </div>
+                            </div>
+                            <div class="box-img">
+                                <input type="file" id="file" class="d-none">
+                            </div>
+                        </div>
+                    </label>
+                    <input type="text" class="form-control disa" readonly id="img_name">
+
+                </div>
+            </div>
+            <div class="col-sm-12 text-end">
+                <button id="add" type="submit" class="btn-add">បង្កើត</button>
+                <a href="/" id="back">បោះបង់</a>
+            </div>
+    </form>
+</div>
+</main>
+<%- include("partials/footer") %>
+<script src="https://code.jquery.com/jquery-3.6.4.slim.js"></script>
+<script src="include/script.js"></script>

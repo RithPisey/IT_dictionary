@@ -1,0 +1,73 @@
+<% let title = "Dashboard"; %>
+<%- include("partials/header"); %>
+<%- include("partials/nav",{title:"Dashboard"}); %>
+<div class="container" id="list">
+    <div class="text-left mt-2">
+        <h4><%= title %></h4>
+        <div class="card">
+            <p>ចំនួនពាក្យសរុប</p>
+            <div class="d-flex row text-center">
+                <div class="col-sm-3 text-end">
+                    <i class='bx bx-bookmark-alt-plus'></i>
+                </div>
+                <div class="col-sm-9 text-start mt-1">
+                    <p>135 ពាក្យ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-left new mt-3 detail">
+        <a href="/add_new_text" class="view" id="add_new"><i class='bx bx-plus-circle'></i> New Keyword</a>
+    </div>
+    <div class="this_table mt-3">
+        <table class="table" id="list_table">
+            <thead class="bg_df">
+                <th style="width:30px; text-align:center">Action</th>
+                <th>ID</th>
+                <th>ឈ្មោះ</th>
+                <th>ឈ្មោះអង់គ្លេស</th>
+                <th>ការពន្យល់</th>
+                <th>រូបភាព</th>
+                <th>អ្នកទទួលខុសត្រូវ</th>
+                <th>កាលបរិឆ្ឆេទ</th>
+            </thead>
+            <tbody>
+                <% for( let index = 0; index < 1000; index++ ) { %>
+                    <tr>
+                        <td class="action">
+                            <span>
+                                <i class='bx bx-dots-horizontal'></i>
+                                <label>
+                                    <a href="" class="b_up"> <i class='bx bxs-pencil'></i></a>
+                                    <a href="" class="b_del"> <i class='bx bx-trash-alt'></i></a>
+                                </label>
+                            </span>
+                        </td>
+                        <td class="id"><%= index %></td>
+                        <td>តេស</td>
+                        <td>Test</td>
+                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero temporibus omnis ullam! Ex ullam sed, maiores repudiandae illo nam assumenda.</td>
+                        <td>
+                            <img src="#" style="width:30px;">
+                        </td>
+                        <td>Author</td>
+                        <td><%= index+"-01-23" %></td>
+                    </tr>
+                <% } %>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+</main>
+<%- include("partials/footer") %>
+
+<script>
+    $("#list_table").DataTable({
+        "ordering": false,
+        "aLengthMenu": [
+            [10, 30, 50, 100, 200, -1],
+            [10, 30, 50, 100, 200, "All"]
+        ],
+    });
+</script>

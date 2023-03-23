@@ -15,7 +15,7 @@ export function verifyToken(option: option) {
 
 function login(
 	successPath: string | null = null,
-	failure: string | null = null
+	failurePath: string | null = null
 ) {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		const username = req.body.username;
@@ -53,7 +53,7 @@ function login(
 	};
 }
 
-function protection(req: Request, res: Response, next: NextFunction) {
+export function protection(req: Request, res: Response, next: NextFunction) {
 	const token = req.cookies.utk;
 	if (token && process.env.ACCESS_TOKEN_SECRET) {
 		jwt.verify(
@@ -61,7 +61,7 @@ function protection(req: Request, res: Response, next: NextFunction) {
 			process.env.ACCESS_TOKEN_SECRET,
 			(err: any, user: any) => {
 				if (err) {
-					return res.sendStatus(401).render("error", {
+					return res.sendStatus(401).render("login", {
 						errMsg: "Something wrong with your authentication!",
 						auth: false,
 					});
@@ -71,8 +71,8 @@ function protection(req: Request, res: Response, next: NextFunction) {
 			}
 		);
 	} else {
-		return res.status(401).render("error", {
-			errMsg: "Something wrong with your authentication!",
+		return res.status(401).render("login", {
+			errMsg: "លោកអ្នកតម្រូវអោយចូលទៅកាន់គណនីរបស់អ្នកជាមុន!",
 			auth: false,
 		});
 	}

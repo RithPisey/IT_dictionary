@@ -1,0 +1,23 @@
+<nav class="navbar navbar-light bg-light header">
+	<div class="container-fluid">
+		<h3><%= title %></h3>
+		<div class="d-flex row">
+			<div class="col-sm-4">
+				<a href="/" class="homepage <% title == 'Dashboard' && 'thispage' %>"
+					>ទំព័រដើម</a
+				>
+			</div>
+			<div class="col-sm-4">
+				<a
+					href="/message"
+					class="message <% title == 'Message' && 'thispage' %>"
+				>
+					<i class="bx bxs-bell-ring"></i>
+				</a>
+			</div>
+			<div class="col-sm-4">
+				<a href="/logout" class="btn btn-danger btn-sm">ចាកចេញ</a>
+			</div>
+		</div>
+	</div>
+</nav>

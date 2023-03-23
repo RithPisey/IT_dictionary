@@ -11,7 +11,6 @@ export class KeywordController {
 	private setRoutes() {
 		this._router.get("/fetch-keyword", async function (req, res) {
 			const keywords = await prisma.keyword.findMany({});
-
 			if (keywords) {
 				return res.status(200).json({ msg: "success", keywords: keywords });
 			} else {

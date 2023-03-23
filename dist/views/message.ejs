@@ -1,0 +1,87 @@
+
+<% let title = "Message"; %>
+<%- include("partials/header"); %>
+<%- include("partials/nav",{title:"Message"}); %>
+<div class="container">
+    <div class="text-left mt-2">
+        <h4><%=title%></h4>
+        <div class="card">
+            <p>ចំនួនសារសរុប</p>
+            <div class="d-flex row text-center">
+                <div class="col-sm-3 text-end">
+                    <i class='bx bx-message-rounded-detail'></i>
+                </div>
+                <div class="col-sm-9 text-start mt-1">
+                    <p>3 សារ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="this_table mt-3">
+        <table class="table" id="list_table">
+            <thead class="bg_df message_list">
+                <th class="first">ID</th>
+                <th>ឈ្មោះ</th>
+                <th>ពាក្យគន្លឺះ</th>
+                <th>ការពិព័ណ៌នា</th>
+                <th>កាលបរិច្ឆេត</th>
+                <th class="info text-end">ពត៌មាន</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Demo1</td>
+                    <td>Demo1</td>
+                    <td>Demo....1</td>
+                    <td>2023-10-10</td>
+                    <td class="detail text-end">
+                        <button data-bs-toggle="modal" data-bs-target="#detail" class="view">Detail</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Demo1</td>
+                    <td>Demo1</td>
+                    <td>Demo....1</td>
+                    <td>2023-10-10</td>
+                    <td class="detail text-end">
+                        <button data-bs-toggle="modal" data-bs-target="#detail" class="view">Detail</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Demo1</td>
+                    <td>Demo1</td>
+                    <td>Demo....1</td>
+                    <td>2023-10-10</td>
+                    <td class="detail text-end">
+                        <button data-bs-toggle="modal" data-bs-target="#detail" class="view">Detail</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+<!-- Modal -->
+<div class="modal" id="detail" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title def-col">ពាក្យគន្លឺះ</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi aspernatur odio error sit quas velit id expedita quis suscipit ratione? Provident repellendus quo harum sequi earum labore sapiente vitae ratione.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">បិទ</button>
+                <button type="button" class="btn btn-primary">រក្សាទុក</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("partials/footer") %>
+<script src="script/script.js"></script>

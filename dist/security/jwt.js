@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyToken = void 0;
+exports.protection = exports.verifyToken = void 0;
 const passwordGenerate_1 = require("../libs/passwordGenerate");
 const generateToken_1 = require("./generateToken");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -21,7 +21,7 @@ function verifyToken(option) {
     return login(option.successPath, option.failurePath);
 }
 exports.verifyToken = verifyToken;
-function login(successPath = null, failure = null) {
+function login(successPath = null, failurePath = null) {
     return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         const username = req.body.username;
         const password = req.body.password;
@@ -57,7 +57,7 @@ function protection(req, res, next) {
     if (token && process.env.ACCESS_TOKEN_SECRET) {
         jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
             if (err) {
-                return res.sendStatus(401).render("error", {
+                return res.sendStatus(401).render("login", {
                     errMsg: "Something wrong with your authentication!",
                     auth: false,
                 });
@@ -67,10 +67,11 @@ function protection(req, res, next) {
         });
     }
     else {
-        return res.status(401).render("error", {
-            errMsg: "Something wrong with your authentication!",
+        return res.status(401).render("login", {
+            errMsg: "លោកអ្នកតម្រូវអោយចូលទៅកាន់គណនីរបស់អ្នកជាមុន!",
             auth: false,
         });
     }
 }
+exports.protection = protection;
 //# sourceMappingURL=jwt.js.map
