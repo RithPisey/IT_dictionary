@@ -24,7 +24,7 @@ class Application {
         this._app.set("views", path_1.default.join(__dirname + "/views"));
         this._app.set("view engine", "ejs");
         this._app.use(express_1.default.json());
-        this._app.use(express_1.default.urlencoded({ extended: false }));
+        this._app.use(express_1.default.urlencoded({ extended: true }));
         this._app.use((0, cookie_parser_1.default)());
         this._app.use((0, express_session_1.default)({
             secret: ["any long secret key"],

@@ -33,6 +33,12 @@ function login(successPath = null, failurePath = null) {
                 salt: true,
             },
         });
+        if (!user) {
+            return res.render("login", {
+                errMsg: "Something wrong with your authentication!",
+                auth: false,
+            });
+        }
         const isValidPassword = (0, passwordGenerate_1.validatePassword)(password, (user === null || user === void 0 ? void 0 : user.hash) || "", (user === null || user === void 0 ? void 0 : user.salt) || "");
         if (isValidPassword && password) {
             const accessToken = (0, generateToken_1.generateAccessToken)({

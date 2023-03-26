@@ -20,7 +20,18 @@ class KeywordController {
     setRoutes() {
         this._router.get("/fetch-keyword", function (req, res) {
             return __awaiter(this, void 0, void 0, function* () {
-                const keywords = yield dataSource_1.prisma.keyword.findMany({});
+                const keywords = yield dataSource_1.prisma.keyword.findMany({
+                    select: {
+                        id: true,
+                        Attributes: true,
+                        explanation: true,
+                        keyword: true,
+                        Responsible_People: true,
+                        start_letter: true,
+                        is_new: true,
+                        approved_date_by_commitee: true,
+                    },
+                });
                 if (keywords) {
                     return res.status(200).json({ msg: "success", keywords: keywords });
                 }

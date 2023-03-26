@@ -28,6 +28,12 @@ function login(
 				salt: true,
 			},
 		});
+		if (!user) {
+			return res.render("login", {
+				errMsg: "Something wrong with your authentication!",
+				auth: false,
+			});
+		}
 		const isValidPassword = validatePassword(
 			password,
 			user?.hash || "",

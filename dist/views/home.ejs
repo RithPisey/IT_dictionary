@@ -11,7 +11,7 @@
                     <i class='bx bx-bookmark-alt-plus'></i>
                 </div>
                 <div class="col-sm-9 text-start mt-1">
-                    <p>135 ពាក្យ</p>
+                    <p><%= keywords.length %> ពាក្យ</p>
                 </div>
             </div>
         </div>
@@ -24,36 +24,39 @@
             <thead class="bg_df">
                 <th style="width:30px; text-align:center">Action</th>
                 <th>ID</th>
-                <th>ឈ្មោះ</th>
+                <th>ឈ្មោះខ្មែរ</th>
                 <th>ឈ្មោះអង់គ្លេស</th>
+                <th>ឈ្មោះបារាំង</th>
                 <th>ការពន្យល់</th>
                 <th>រូបភាព</th>
-                <th>អ្នកទទួលខុសត្រូវ</th>
+                <th>ប្រភព</th>
                 <th>កាលបរិឆ្ឆេទ</th>
             </thead>
             <tbody>
-                <% for( let index = 0; index < 1000; index++ ) { %>
-                    <tr>
+                <% keywords.forEach((keyword,index) => { %>
+                 <tr>
                         <td class="action">
                             <span>
                                 <i class='bx bx-dots-horizontal'></i>
                                 <label>
-                                    <a href="" class="b_up"> <i class='bx bxs-pencil'></i></a>
+                                    <a href="/add_new_text?id=<%= keyword.id %>" class="b_up"> <i class='bx bxs-pencil'></i></a>
                                     <a href="" class="b_del"> <i class='bx bx-trash-alt'></i></a>
                                 </label>
                             </span>
                         </td>
-                        <td class="id"><%= index %></td>
-                        <td>តេស</td>
-                        <td>Test</td>
-                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero temporibus omnis ullam! Ex ullam sed, maiores repudiandae illo nam assumenda.</td>
+                        <td class="id"><%= index+1 %></td>
+                        <td><%= keyword.keyword.kh %></td>
+                        <td><%= keyword.keyword.eng %></td>
+                        <td><%= keyword.keyword.fr %></td>
+                        <td><%= keyword.explanation %></td>
                         <td>
-                            <img src="#" style="width:30px;">
+                            <img src="<%= keyword.picture %>" style="width:30px;">
                         </td>
-                        <td>Author</td>
-                        <td><%= index+"-01-23" %></td>
+                        <td><%= keyword.Responsible_People.responsible_name %></td>
+                        <td><%= keyword.approved_date_by_commitee %></td>
                     </tr>
-                <% } %>
+                <% }) %>
+                
                 
             </tbody>
         </table>

@@ -1,26 +1,26 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Keyword {
   id                                BigInt              @id @default(autoincrement())
   keyword                           Json
-  start_letter                      String              @db.Char()
+  start_letter                      String              @db.Char(1)
   is_new                            Boolean
-  description_by_commitee           String
-  picture                           String
-  equation                          String
-  approved_date_by_commitee         DateTime
-  description_by_councile           DateTime
-  finally_approvied_date_by_council DateTime
+  explanation                       String
+  description_by_commitee           String?
+  picture                           String?
+  equation                          String?
+  approved_date_by_commitee         DateTime?
+  description_by_councile           String              @db.LongText
+  finally_approvied_date_by_council DateTime?
   Attributes                        Attributes?         @relation(fields: [attributesId], references: [id])
   attributesId                      Int?
   Responsible_People                Responsible_People? @relation(fields: [responsible_PeopleId], references: [id])
@@ -28,9 +28,10 @@ model Keyword {
 }
 
 model Attributes {
-  id             Int       @id @default(autoincrement())
-  attribute_name String
-  Keyword        Keyword[]
+  id                 Int       @id @default(autoincrement())
+  attribute_name_eng String
+  attribute_name_kh  String
+  Keyword            Keyword[]
 }
 
 model Responsible_People {

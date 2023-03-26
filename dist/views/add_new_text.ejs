@@ -1,30 +1,66 @@
-<% let title = "Add New Word"; %>
+<% const title = "Add New Word"; %>
 <%- include("partials/header"); %>
 <%- include("partials/nav",{title:"Add New Word"}); %>
 <div class="container" id="frm-add">
     <div class="text-left mt-2 mb-3">
         <h4><%=title%></h4>
     </div>
-    <form action="/add-new-word" method="post">
+
+    <form action="/add-new-word" method="post" enctype="multipart/form-data">
+        <% if (errors) { %>
+            <% errors.forEach(element => { %>
+                <div class="alert alert-danger" role="alert">
+				    <%= element %>
+		        </div>
+            <% }) %>    
+        <% } %>
         <div class="row d-flex">
             <div class="col-sm-10 text-start">
                 <div class="form-group mb-3">
                     <div class="row d-flex">
                         <div class="col-sm-4">
                             <label for="">ពាក្យខ្មែរ</label>
-                            <input type="text" name="kh_word" class="form-control">
+                            <% const kh = keyword.keyword.kh ? keyword.keyword.kh : "" %>
+                            <input type="text" value="<%= kh %>" name="kh_word" class="form-control">
                         </div>
-                        <div class="col-sm-4">
-                            <label for="">ថ្នាក់ពាក្យ</label>
-                            <select name="att" class="form-select">
-                                <option value="noun">នាម</option>
-                                <option value="adj">គុណនាម</option>
-                                <option value="verb">កិរិយា</option>
+                        <div class="col-sm-2">
+                            <label for="">អក្សរខាងដើម</label>
+                            <select name="start_letter" class="form-select">
+                                <% const letters = 'កខគឃងចឆជឈញដឋឌធណតថទធនបផពភមយរលវសហឡអ' %>
+                                <% for( let index = 0; index < letters.length; index++ ) { %>
+                                    <% if (keyword.start_letter === letters[index]) { %>
+                                        <option value="<%= letters[index] %>" selected><%= letters[index] %></option>
+                                    <% } else {%>  
+                                        <option value="<%= letters[index] %>"><%= letters[index] %></option>
+                                    <% } %>
+                                <% } %>
                             </select>
                         </div>
-                        <div class="col-sm-4 mt-4">
+                        <div class="col-sm-2">
+    
+                            <label for="">ថ្នាក់ពាក្យ</label>
+                            <select name="attr" class="form-select">
+                                <% attributes.forEach(attribute => { %>
+                                    <% if (keyword.Attributes.id === attribute.id) { %>
+                                        <option value="<%= attribute.id %>" selected><%= attribute.attribute_name_kh %></option>
+                                    <%} else{ %>
+                                        <option value="<%= attribute.id %>"><%= attribute.attribute_name_kh %></option>
+                                   <% } %>            
+                                <% }) %>                             
+                            </select>
+                        </div>
+                        <div class="col-sm-4 mt-2">
                             <div class="mt-1">
-                                <input value="true" checked  type="checkbox" name="is_new">
+                                <% if (keyword) { %>
+                                    <% if (keyword.is_new) { %>
+                                        <input value="true" checked  type="checkbox" name="is_new">
+                                     <%} else{ %>
+                                       <input value="true"  type="checkbox" name="is_new">
+                                   <% } %>  
+                                <%} else{ %>
+                                        <input value="true" checked  type="checkbox" name="is_new">
+                                <% } %>   
+                               
                                 <label for="">ពាក្យថ្មី</label>
                             </div>
                         </div>
@@ -33,15 +69,24 @@
                 <div class="form-group mb-3">
                     <div class="row d-flex">
                         <div class="col-sm-4">
+                            <% const eng = keyword.keyword.eng ? keyword.keyword.eng: "" %>
                             <label for="">ពាក្យអង់គ្លេស</label>
-                            <input name="eng_word" type="text" class="form-control">
+                            <input name="eng_word" value="<%= eng %>"  type="text" class="form-control">
                         </div>
                         <div class="col-sm-5">
-                            <label for="">អ្នកទទួលខុសត្រូវ</label>
+                            <label for="">ប្រភព</label>
                             <select name="res_person" class="form-select">
-                                <option value="sengdy">
-                                    សេងឌី
-                                </option>
+                                <% res_persons.forEach(res_person => { %>
+                                    <% if (keyword.Responsible_People.id === res_person.id) { %>
+                                       <option value="<%= res_person.id %>" selected>
+                                            <%= res_person.responsible_name %>
+                                        </option>
+                                    <%} else{ %>
+                                        <option value="<%= res_person.id %>">
+                                            <%= res_person.responsible_name %>
+                                        </option>
+                                    <% }%>                             
+                                <% }) %>                              
                             </select>
                         </div>
                     </div>
@@ -49,12 +94,14 @@
                 <div class="form-group mb-3">
                     <div class="row d-flex">
                         <div class="col-sm-4">
+                             <% const fr = keyword.keyword.fr ? keyword.keyword.fr: "" %>
                             <label for="">ពាក្យបារាំង</label>
-                            <input name="fr_word" type="text" class="form-control">
+                            <input name="fr_word" value="<%= fr %>" type="text" class="form-control">
                         </div>
                         <div class="col-sm-8">
                             <label for="">ការពន្យល់</label>
-                            <textarea name="explian" class="form-control"></textarea>
+                            <% const explanation = keyword.explanation ? keyword.explanation : "" %>
+                            <textarea name="explain"  class="form-control"><%= explanation %></textarea>
                         </div>
                     </div>
                 </div>
@@ -62,23 +109,29 @@
                     <div class="row d-flex">
                         <div class="col-sm-4">
                             <label for="">កាលបរិច្ឆេទទទួលស្គាលដោយគណកម្មការ</label>
-                            <input type="date" name="approved_date_by_commitee" class="form-control">
+                            <% let approved_date_by_commitee = keyword.approved_date_by_commitee ? keyword.approved_date_by_commitee : "" %>
+                            <input type="date" value="<%= approved_date_by_commitee %>" name="approved_date_by_commitee" class="form-control">
                         </div>
                         <div class="col-sm-8">
+                            <% const description_by_commitee = keyword.description_by_commitee ? keyword.description_by_commitee : "" %>
                             <label for="">ការពិព័ណ៌នាដោយគណកម្មការ</label>
-                            <textarea name="desc_by_commitee" class="form-control"></textarea>
+                            <textarea name="desc_by_commitee"  class="form-control"><%= description_by_commitee %></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="form-group mb-3">
                     <div class="row d-flex">
                         <div class="col-sm-4">
+                            <% const final_approve_date_by_council = keyword.final_approve_date_by_council ? keyword.final_approve_date_by_council : "" %>
                             <label for="">កាលបរិច្ឆេទទទួលស្គាលដោយក្រុមព្រឹក្សាចុងក្រោយ</label>
-                            <input name="final_approve_date_by_council" type="date" class="form-control">
+                            <input name="final_approve_date_by_council" value="<%= final_approve_date_by_council %>" type="date" class="form-control">
                         </div>
                         <div class="col-sm-8">
+                             <% const description_by_councile = keyword.description_by_councile ? keyword.description_by_councile : "" %>
                             <label for="">ការពិព័ណ៌នាដោយក្រុមព្រឹក្សា</label>
-                            <textarea name="desc_by_council" class="form-control"></textarea>
+                            <textarea  name="desc_by_council" class="form-control">
+                                <%= description_by_councile %>
+                            </textarea>
                         </div>
                     </div>
                 </div>
@@ -100,16 +153,17 @@
                                 </div>
                             </div>
                             <div class="box-img">
-                                <input type="file" id="file" class="d-none">
+                                <input type="file" name="fdata" accept="image/png, image/gif, image/jpeg"   id="file" class="d-none">
                             </div>
                         </div>
                     </label>
+                    <input type="text" name="bdata" hidden id="bdata" >
                     <input type="text" class="form-control disa" readonly id="img_name">
 
                 </div>
             </div>
             <div class="col-sm-12 text-end">
-                <button id="add" type="submit" class="btn-add">បង្កើត</button>
+                <button id="add" type="submit" class="btn-<%= update?"update":"add" %>"><%= update?"កែរពាក្យ":"បង្កើត" %></button>
                 <a href="/" id="back">បោះបង់</a>
             </div>
     </form>
@@ -117,4 +171,4 @@
 </main>
 <%- include("partials/footer") %>
 <script src="https://code.jquery.com/jquery-3.6.4.slim.js"></script>
-<script src="include/script.js"></script>
+<script src="script/script.js"></script>

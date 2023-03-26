@@ -26,7 +26,7 @@ export class Application {
 		this._app.set("views", path.join(__dirname + "/views"));
 		this._app.set("view engine", "ejs");
 		this._app.use(express.json());
-		this._app.use(express.urlencoded({ extended: false }));
+		this._app.use(express.urlencoded({ extended: true }));
 		this._app.use(cookiesParser());
 		this._app.use(
 			session({
