@@ -53,7 +53,7 @@ function login(successPath = null, failurePath = null) {
                     secure: false,
                     sameSite: true,
                 })
-                    .render(successPath, { profile: user, auth: true });
+                    .redirect("/");
             }
         }
     });
@@ -69,6 +69,7 @@ function protection(req, res, next) {
                 });
             }
             res.locals.profile = user;
+            console.log("protection");
             return next();
         });
     }

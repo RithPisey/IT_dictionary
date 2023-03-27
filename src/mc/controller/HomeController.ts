@@ -45,8 +45,11 @@ export class HomeController {
 					approved_date_by_commitee: true,
 				},
 			});
-
-			res.render("home.ejs", { keywords: keywords });
+			if (keywords) {
+				res.render("home", { keywords: keywords });
+			} else {
+				res.render("home", { keywords: [] });
+			}
 		});
 		this._router.get("/add_new_text", protection, async (req, res) => {
 			const id = req.query.id;
@@ -69,7 +72,6 @@ export class HomeController {
 					},
 				});
 
-				console.log(keyword);
 				res.render("add_new_text", {
 					errors: null,
 					attributes: this._attributes,

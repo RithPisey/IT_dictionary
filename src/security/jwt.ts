@@ -53,7 +53,7 @@ function login(
 						secure: false,
 						sameSite: true,
 					})
-					.render(successPath, { profile: user, auth: true });
+					.redirect("/");
 			}
 		}
 	};
@@ -61,6 +61,7 @@ function login(
 
 export function protection(req: Request, res: Response, next: NextFunction) {
 	const token = req.cookies.utk;
+
 	if (token && process.env.ACCESS_TOKEN_SECRET) {
 		jwt.verify(
 			token,
@@ -73,6 +74,7 @@ export function protection(req: Request, res: Response, next: NextFunction) {
 					});
 				}
 				res.locals.profile = user;
+				console.log("protection");
 				return next();
 			}
 		);
