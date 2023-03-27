@@ -90,7 +90,17 @@ class HomeController {
                     errors: null,
                     attributes: this._attributes,
                     res_persons: this._res_person,
-                    keyword: null,
+                    keyword: {
+                        id: -1,
+                        keyword: { kh: "", fr: "", eng: "" },
+                        picture: "",
+                        Responsible_People: { id: "", responsible_name: "" },
+                        explanation: "",
+                        start_letter: "",
+                        approved_date_by_commitee: "",
+                        is_new: true,
+                        Attributes: { id: "", attribute_name_kh: "" },
+                    },
                     update: false,
                 });
             }

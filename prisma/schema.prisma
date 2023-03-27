@@ -10,11 +10,11 @@ datasource db {
 }
 
 model Keyword {
-  id                                BigInt              @id @default(autoincrement())
+  id                                Int                 @id @default(autoincrement())
   keyword                           Json
   start_letter                      String              @db.Char(1)
   is_new                            Boolean
-  explanation                       String
+  explanation                       String              @db.Text
   description_by_commitee           String?
   picture                           String?
   equation                          String?

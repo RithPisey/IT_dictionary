@@ -5,7 +5,7 @@
     <div class="text-left mt-2 mb-3">
         <h4><%=title%></h4>
     </div>
-
+<% console.log(keyword) %>
     <form action="/add-new-word" method="post" enctype="multipart/form-data">
         <% if (errors) { %>
             <% errors.forEach(element => { %>
@@ -20,7 +20,8 @@
                     <div class="row d-flex">
                         <div class="col-sm-4">
                             <label for="">ពាក្យខ្មែរ</label>
-                            <% const kh = keyword.keyword.kh ? keyword.keyword.kh : "" %>
+
+                            <% const kh =keyword.keyword.kh ? keyword.keyword.kh : "" %>
                             <input type="text" value="<%= kh %>" name="kh_word" class="form-control">
                         </div>
                         <div class="col-sm-2">
