@@ -22,6 +22,7 @@
     <div class="this_table mt-3">
         <table class="table" id="list_table">
             <thead class="bg_df">
+                <th></th>
                 <th style="width:30px; text-align:center">Action</th>
                 <th>ID</th>
                 <th>ឈ្មោះខ្មែរ</th>
@@ -35,12 +36,13 @@
             <tbody>
                 <% keywords.forEach((keyword,index) => { %>
                  <tr>
+                        <td></td>
                         <td class="action">
                             <span>
                                 <i class='bx bx-dots-horizontal'></i>
                                 <label>
                                     <a href="/add_new_text?id=<%= keyword.id %>" class="b_up"> <i class='bx bxs-pencil'></i></a>
-                                    <a href="" class="b_del"> <i class='bx bx-trash-alt'></i></a>
+                                    <a href="/delete-keyword?id=<%= keyword.id %>" class="b_del"> <i class='bx bx-trash-alt'></i></a>
                                 </label>
                             </span>
                         </td>
@@ -50,7 +52,7 @@
                         <td><%= keyword.keyword.fr %></td>
                         <td><%= keyword.explanation %></td>
                         <td>
-                            <img src="<%= keyword.picture %>" style="width:30px;">
+                            <img src="<%='uploads/'+ keyword.picture %>" style="width:30px;">
                         </td>
                         <td><%= keyword.Responsible_People.responsible_name %></td>
                         <td><%= keyword.approved_date_by_commitee %></td>
@@ -67,7 +69,16 @@
 
 <script>
     $("#list_table").DataTable({
-        "ordering": false,
+        columnDefs: [{
+                targets: [0],
+                orderable: false,
+                visible: false
+            },
+            {
+                targets: [1],
+                orderable: false,
+            }
+        ],
         "aLengthMenu": [
             [10, 30, 50, 100, 200, -1],
             [10, 30, 50, 100, 200, "All"]

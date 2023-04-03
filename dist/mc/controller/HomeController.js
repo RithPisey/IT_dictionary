@@ -69,6 +69,7 @@ class HomeController {
                 const keyword = yield dataSource_1.prisma.keyword.findUnique({
                     where: { id: parseInt(id.toLocaleString()) },
                     select: {
+                        id: true,
                         keyword: true,
                         start_letter: true,
                         Attributes: true,
@@ -78,6 +79,7 @@ class HomeController {
                         finally_approvied_date_by_council: true,
                         description_by_commitee: true,
                         description_by_councile: true,
+                        picture: true,
                         is_new: true,
                     },
                 });
@@ -112,6 +114,23 @@ class HomeController {
         this._router.get("/message", jwt_1.protection, function (req, res) {
             res.render("message.ejs");
         });
+        this.router.get("/delete-keyword", jwt_1.protection, (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const id = req.query.id;
+            if (id) {
+                const keyword = yield dataSource_1.prisma.keyword.delete({
+                    where: { id: parseInt(id === null || id === void 0 ? void 0 : id.toLocaleString()) },
+                });
+                if (keyword) {
+                    res.redirect("/");
+                }
+                else {
+                    res.render("error", { error: "Cannot delete" });
+                }
+            }
+            else {
+                res.render("error", { error: "Cannot delete" });
+            }
+        }));
         this._router
             .get("/login", function (req, res) {
             res.render("login", { errMsg: null });
@@ -164,28 +183,100 @@ class HomeController {
             // const utf8Encode = new TextEncoder();
             // const arr = utf8Encode.encode(bdata).buffer;
         }));
+        this.router.post("/update-keyword", jwt_1.protection, upload.single("fdata"), (req, res) => {
+            var _a, _b;
+            const id = req.query.id;
+            if (id == "0") {
+                res.render("error", { error: "Something wrong!" });
+            }
+            const { kh_word, eng_word, is_new, explain } = req.body;
+            const err = [];
+            if (validator_1.default.isEmpty(kh_word)) {
+                err.push("សូមបំពេញ(ពាក្យខ្មែរ)");
+            }
+            if (validator_1.default.isEmpty(eng_word)) {
+                err.push("សូមបំពេញ(ពាក្យអង់គ្លេស)");
+            }
+            if (validator_1.default.isEmpty(explain)) {
+                err.push("សូមបំពេញ(ការពន្យល់)");
+            }
+            if (err.length > 0) {
+                return res.render("add_new_text", {
+                    errors: err,
+                    attributes: this._attributes,
+                    res_persons: this._res_person,
+                });
+            }
+            let keyword;
+            if (is_new == "true") {
+                keyword = this.isNewWord(req.body, (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename, true, id === null || id === void 0 ? void 0 : id.toLocaleString());
+            }
+            else {
+                keyword = this.isNewWord(req.body, (_b = req.file) === null || _b === void 0 ? void 0 : _b.filename, false, id === null || id === void 0 ? void 0 : id.toLocaleString());
+            }
+            keyword.then((val) => {
+                if (val) {
+                    return res.redirect("/");
+                }
+                else {
+                    res.render("add_new_text.ejs", {
+                        errors: ["មិនអាចកែរប្រែបានទេ។ សូមត្រួតពិនិត្យម្ដងទៀត!"],
+                        attributes: this._attributes,
+                        res_persons: this._res_person,
+                    });
+                }
+            });
+        });
     }
-    isNewWord(data, picture, is_new) {
+    isNewWord(data, picture, is_new, id = "") {
         return __awaiter(this, void 0, void 0, function* () {
             const { kh_word, eng_word, fr_word, attr, start_letter, res_person, explain, approved_date_by_commitee, desc_by_commitee, final_approve_date_by_council, desc_by_council, } = data;
-            let keyword = yield dataSource_1.prisma.keyword.create({
-                data: {
-                    keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
-                    is_new: is_new,
-                    explanation: explain,
-                    responsible_PeopleId: parseInt(res_person),
-                    start_letter: start_letter,
-                    approved_date_by_commitee: approved_date_by_commitee == "" ? null : approved_date_by_commitee,
-                    attributesId: parseInt(attr),
-                    description_by_commitee: desc_by_commitee,
-                    description_by_councile: desc_by_council,
-                    equation: "",
-                    finally_approvied_date_by_council: final_approve_date_by_council == ""
-                        ? null
-                        : final_approve_date_by_council,
-                    picture: picture,
-                },
-            });
+            let keyword;
+            if (!id) {
+                keyword = yield dataSource_1.prisma.keyword.create({
+                    data: {
+                        keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
+                        is_new: is_new,
+                        explanation: explain,
+                        responsible_PeopleId: parseInt(res_person),
+                        start_letter: start_letter,
+                        approved_date_by_commitee: approved_date_by_commitee == ""
+                            ? null
+                            : new Date(approved_date_by_commitee),
+                        attributesId: parseInt(attr),
+                        description_by_commitee: desc_by_commitee,
+                        description_by_councile: desc_by_council,
+                        equation: "",
+                        finally_approvied_date_by_council: final_approve_date_by_council == ""
+                            ? null
+                            : new Date(final_approve_date_by_council),
+                        picture: picture,
+                    },
+                });
+            }
+            else {
+                keyword = dataSource_1.prisma.keyword.update({
+                    where: { id: parseInt(id === null || id === void 0 ? void 0 : id.toLocaleString()) },
+                    data: {
+                        keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
+                        is_new: is_new,
+                        explanation: explain,
+                        responsible_PeopleId: parseInt(res_person),
+                        start_letter: start_letter,
+                        approved_date_by_commitee: approved_date_by_commitee == ""
+                            ? null
+                            : new Date(approved_date_by_commitee),
+                        attributesId: parseInt(attr),
+                        description_by_commitee: desc_by_commitee,
+                        description_by_councile: desc_by_council,
+                        equation: "",
+                        finally_approvied_date_by_council: final_approve_date_by_council == ""
+                            ? null
+                            : new Date(final_approve_date_by_council),
+                        picture: picture,
+                    },
+                });
+            }
             return keyword;
         });
     }

@@ -74,7 +74,6 @@ export function protection(req: Request, res: Response, next: NextFunction) {
 					});
 				}
 				res.locals.profile = user;
-				console.log("protection");
 				return next();
 			}
 		);

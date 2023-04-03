@@ -69,7 +69,6 @@ function protection(req, res, next) {
                 });
             }
             res.locals.profile = user;
-            console.log("protection");
             return next();
         });
     }

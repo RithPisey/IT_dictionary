@@ -59,6 +59,7 @@ export class HomeController {
 				const keyword = await prisma.keyword.findUnique({
 					where: { id: parseInt(id.toLocaleString()) },
 					select: {
+						id: true,
 						keyword: true,
 						start_letter: true,
 						Attributes: true,
@@ -68,6 +69,7 @@ export class HomeController {
 						finally_approvied_date_by_council: true,
 						description_by_commitee: true,
 						description_by_councile: true,
+						picture: true,
 						is_new: true,
 					},
 				});
@@ -102,6 +104,21 @@ export class HomeController {
 
 		this._router.get("/message", protection, function (req, res) {
 			res.render("message.ejs");
+		});
+		this.router.get("/delete-keyword", protection, async (req, res) => {
+			const id = req.query.id;
+			if (id) {
+				const keyword = await prisma.keyword.delete({
+					where: { id: parseInt(id?.toLocaleString()) },
+				});
+				if (keyword) {
+					res.redirect("/");
+				} else {
+					res.render("error", { error: "Cannot delete" });
+				}
+			} else {
+				res.render("error", { error: "Cannot delete" });
+			}
 		});
 		this._router
 			.get("/login", function (req, res) {
@@ -162,12 +179,73 @@ export class HomeController {
 				// const arr = utf8Encode.encode(bdata).buffer;
 			}
 		);
+
+		this.router.post(
+			"/update-keyword",
+			protection,
+			upload.single("fdata"),
+			(req, res) => {
+				const id = req.query.id;
+				if (id == "0") {
+					res.render("error", { error: "Something wrong!" });
+				}
+				const { kh_word, eng_word, is_new, explain } = req.body;
+				const err = [];
+				if (validator.isEmpty(kh_word)) {
+					err.push("សូមបំពេញ(ពាក្យខ្មែរ)");
+				}
+				if (validator.isEmpty(eng_word)) {
+					err.push("សូមបំពេញ(ពាក្យអង់គ្លេស)");
+				}
+				if (validator.isEmpty(explain)) {
+					err.push("សូមបំពេញ(ការពន្យល់)");
+				}
+
+				if (err.length > 0) {
+					return res.render("add_new_text", {
+						errors: err,
+						attributes: this._attributes,
+						res_persons: this._res_person,
+					});
+				}
+
+				let keyword;
+				if (is_new == "true") {
+					keyword = this.isNewWord(
+						req.body,
+						req.file?.filename,
+						true,
+						id?.toLocaleString()
+					);
+				} else {
+					keyword = this.isNewWord(
+						req.body,
+						req.file?.filename,
+						false,
+						id?.toLocaleString()
+					);
+				}
+
+				keyword.then((val) => {
+					if (val) {
+						return res.redirect("/");
+					} else {
+						res.render("add_new_text.ejs", {
+							errors: ["មិនអាចកែរប្រែបានទេ។ សូមត្រួតពិនិត្យម្ដងទៀត!"],
+							attributes: this._attributes,
+							res_persons: this._res_person,
+						});
+					}
+				});
+			}
+		);
 	}
 
 	private async isNewWord(
 		data: any,
 		picture: string | undefined,
-		is_new: boolean
+		is_new: boolean,
+		id: string = ""
 	) {
 		const {
 			kh_word,
@@ -182,27 +260,56 @@ export class HomeController {
 			final_approve_date_by_council,
 			desc_by_council,
 		} = data;
+		let keyword;
+		if (!id) {
+			keyword = await prisma.keyword.create({
+				data: {
+					keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
+					is_new: is_new,
+					explanation: explain,
+					responsible_PeopleId: parseInt(res_person),
+					start_letter: start_letter,
+					approved_date_by_commitee:
+						approved_date_by_commitee == ""
+							? null
+							: new Date(approved_date_by_commitee),
+					attributesId: parseInt(attr),
+					description_by_commitee: desc_by_commitee,
+					description_by_councile: desc_by_council,
+					equation: "",
+					finally_approvied_date_by_council:
+						final_approve_date_by_council == ""
+							? null
+							: new Date(final_approve_date_by_council),
+					picture: picture,
+				},
+			});
+		} else {
+			keyword = prisma.keyword.update({
+				where: { id: parseInt(id?.toLocaleString()) },
+				data: {
+					keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
+					is_new: is_new,
+					explanation: explain,
+					responsible_PeopleId: parseInt(res_person),
+					start_letter: start_letter,
+					approved_date_by_commitee:
+						approved_date_by_commitee == ""
+							? null
+							: new Date(approved_date_by_commitee),
+					attributesId: parseInt(attr),
+					description_by_commitee: desc_by_commitee,
+					description_by_councile: desc_by_council,
+					equation: "",
+					finally_approvied_date_by_council:
+						final_approve_date_by_council == ""
+							? null
+							: new Date(final_approve_date_by_council),
+					picture: picture,
+				},
+			});
+		}
 
-		let keyword = await prisma.keyword.create({
-			data: {
-				keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
-				is_new: is_new,
-				explanation: explain,
-				responsible_PeopleId: parseInt(res_person),
-				start_letter: start_letter,
-				approved_date_by_commitee:
-					approved_date_by_commitee == "" ? null : approved_date_by_commitee,
-				attributesId: parseInt(attr),
-				description_by_commitee: desc_by_commitee,
-				description_by_councile: desc_by_council,
-				equation: "",
-				finally_approvied_date_by_council:
-					final_approve_date_by_council == ""
-						? null
-						: final_approve_date_by_council,
-				picture: picture,
-			},
-		});
 		return keyword;
 	}
 

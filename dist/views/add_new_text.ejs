@@ -5,8 +5,9 @@
     <div class="text-left mt-2 mb-3">
         <h4><%=title%></h4>
     </div>
-<% console.log(keyword) %>
-    <form action="/add-new-word" method="post" enctype="multipart/form-data">
+
+    <% const kid =keyword.id ? keyword.id : 0 %>
+    <form action="<%=update?'/update-keyword?id='+kid:'/add-new-word' %>" method="post" enctype="multipart/form-data">
         <% if (errors) { %>
             <% errors.forEach(element => { %>
                 <div class="alert alert-danger" role="alert">
