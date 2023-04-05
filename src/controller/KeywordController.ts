@@ -21,6 +21,9 @@ export class KeywordController {
 					is_new: true,
 					approved_date_by_commitee: true,
 				},
+				orderBy: {
+					start_letter: "asc",
+				},
 			});
 			if (keywords) {
 				return res.status(200).json({ msg: "success", keywords: keywords });
