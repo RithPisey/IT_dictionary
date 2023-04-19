@@ -25,6 +25,7 @@ model Keyword {
   attributesId                      Int?
   Responsible_People                Responsible_People? @relation(fields: [responsible_PeopleId], references: [id])
   responsible_PeopleId              Int?
+  keyword_device                    keyword_device[]
 }
 
 model Attributes {
@@ -46,4 +47,17 @@ model user {
   hash      String
   salt      String
   is_active Boolean @default(true)
+}
+
+model devices {
+  device_id      String           @id
+  keyword_device keyword_device[]
+}
+
+model keyword_device {
+  id         Int     @id @default(autoincrement())
+  keyword_id Int
+  keyword    Keyword @relation(fields: [keyword_id], references: [id])
+  device_id  String
+  devices    devices @relation(fields: [device_id], references: [device_id])
 }
