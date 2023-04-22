@@ -72,19 +72,21 @@ export class KeywordController {
 			}
 		});
 		this._router.post("/check-saved-keyword", async function (req, res) {
-			const { kid } = req.body;
-			const keywords = await prisma.keyword.findUnique({
+			const { kid, did } = req.body;
+			const keyword = await prisma.keyword_device.findFirst({
 				where: {
-					id: kid,
+					device_id: did,
+					keyword_id: kid,
 				},
 				select: {
-					id: true,
+					keyword: true,
 				},
 			});
-			if (keywords) {
+
+			if (keyword) {
 				return res.status(200).json({ issaved: true });
 			} else {
-				return res.status(200).json({ issaved: false });
+				return res.status(501).json({ issaved: false });
 			}
 		});
 		this._router.post("/save-keyword", async function (req, res) {
@@ -105,15 +107,15 @@ export class KeywordController {
 					},
 				});
 				if (keyword_device) {
-					return res.status(200).json({ success: true });
+					return res.status(200).json({ save: true });
 				} else {
-					return res.status(200).json({ success: false });
+					return res.status(501).json({ fail: false });
 				}
 			} else {
-				return res.status(200).json({ success: false });
+				return res.status(501).json({ fail: false });
 			}
 		});
-		this._router.get("/saved-keyword", async (req, res) => {
+		this._router.post("/saved-keyword", async (req, res) => {
 			const { did } = req.body;
 			const keyword_device = await prisma.keyword_device.findMany({
 				where: {
