@@ -171,7 +171,7 @@ class KeywordController {
             if (kd) {
                 const keyword_device = yield dataSource_1.prisma.keyword_device.delete({
                     where: {
-                        id: kd,
+                        id: kd.id,
                     },
                 });
                 if (keyword_device) {
