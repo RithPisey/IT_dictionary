@@ -161,6 +161,33 @@ export class KeywordController {
         res.status(200).json({ msg: "Cannot delete", isDleted: false });
       }
     });
+    this._router.post("/unsave-keyword", async (req, res) => {
+      const { kid, did } = req.body;
+      const kd = await prisma.keyword_device.findFirst({
+        where: {
+          device_id: did,
+          keyword_id: kid,
+        },
+        select: {
+          id: true,
+        },
+      });
+      if (kd) {
+        const keyword_device = await prisma.keyword_device.delete({
+          where: {
+            device_id: did,
+            keyword_id: kid,
+          },
+        });
+        if (keyword_device) {
+          res.status(200).json({ msg: "deleted", isDleted: true });
+        } else {
+          res.status(200).json({ msg: "Cannot delete", isDleted: false });
+        }
+      } else {
+        res.status(200).json({ msg: "Cannot delete", isDleted: false });
+      }
+    });
   }
   public get router() {
     return this._router;
