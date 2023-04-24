@@ -148,7 +148,7 @@ export class KeywordController {
       if (kd) {
         const keyword_device = await prisma.keyword_device.delete({
           where: {
-            id: kd,
+            id: parseInt(kd),
           },
         });
         if (keyword_device) {
