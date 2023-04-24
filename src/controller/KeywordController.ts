@@ -122,7 +122,7 @@ export class KeywordController {
         where: {
           device_id: did,
         },
-        select: {
+        include: {
           keyword: true,
         },
       });
