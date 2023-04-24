@@ -39,7 +39,7 @@ class KeywordController {
                     return res.status(200).json({ msg: "success", keywords: keywords });
                 }
                 else {
-                    res.status(500).json({ msg: "failure" });
+                    res.status(200).json({ msg: "failure" });
                 }
             });
         });
@@ -74,7 +74,7 @@ class KeywordController {
                         return res.status(200).json({ msg: "success", keywords: keywords });
                     }
                     else {
-                        res.status(500).json({ msg: "failure" });
+                        res.status(200).json({ msg: "failure" });
                     }
                 }
                 else {
@@ -82,7 +82,7 @@ class KeywordController {
                         return res.status(200).json({ msg: "success", keywords: keywords });
                     }
                     else {
-                        res.status(500).json({ msg: "failure" });
+                        res.status(200).json({ msg: "failure" });
                     }
                 }
             });
@@ -103,22 +103,23 @@ class KeywordController {
                     return res.status(200).json({ issaved: true });
                 }
                 else {
-                    return res.status(501).json({ issaved: false });
+                    return res.status(200).json({ issaved: false });
                 }
             });
         });
         this._router.post("/save-keyword", function (req, res) {
             return __awaiter(this, void 0, void 0, function* () {
                 const { kid, did } = req.body;
-                const keywords = yield dataSource_1.prisma.keyword.findUnique({
+                const kd = yield dataSource_1.prisma.keyword_device.findFirst({
                     where: {
-                        id: kid,
+                        device_id: did,
+                        keyword_id: kid,
                     },
                     select: {
                         id: true,
                     },
                 });
-                if (keywords) {
+                if (!kd) {
                     const keyword_device = yield dataSource_1.prisma.keyword_device.create({
                         data: {
                             device_id: did,
@@ -129,11 +130,11 @@ class KeywordController {
                         return res.status(200).json({ save: true });
                     }
                     else {
-                        return res.status(501).json({ fail: false });
+                        return res.status(200).json({ fail: false });
                     }
                 }
                 else {
-                    return res.status(501).json({ fail: false });
+                    return res.status(200).json({ fail: false });
                 }
             });
         });
@@ -153,7 +154,65 @@ class KeywordController {
                     .json({ msg: "success", keywords: keyword_device });
             }
             else {
-                res.status(500).json({ msg: "failure" });
+                res.status(200).json({ msg: "failure" });
+            }
+        }));
+        this._router.post("/unsaved-keyword", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { kid, did } = req.body;
+            const kd = yield dataSource_1.prisma.keyword_device.findFirst({
+                where: {
+                    device_id: did,
+                    keyword_id: kid,
+                },
+                select: {
+                    id: true,
+                },
+            });
+            if (kd) {
+                const keyword_device = yield dataSource_1.prisma.keyword_device.delete({
+                    where: {
+                        device_id: did,
+                        keyword_id: kid,
+                    },
+                });
+                if (keyword_device) {
+                    res.status(200).json({ msg: "deleted", isDleted: true });
+                }
+                else {
+                    res.status(200).json({ msg: "Cannot delete", isDleted: false });
+                }
+            }
+            else {
+                res.status(200).json({ msg: "Cannot delete", isDleted: false });
+            }
+        }));
+        this._router.post("/unsave-keyword", (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { kid, did } = req.body;
+            const kd = yield dataSource_1.prisma.keyword_device.findFirst({
+                where: {
+                    device_id: did,
+                    keyword_id: kid,
+                },
+                select: {
+                    id: true,
+                },
+            });
+            if (kd) {
+                const keyword_device = yield dataSource_1.prisma.keyword_device.delete({
+                    where: {
+                        device_id: did,
+                        keyword_id: kid,
+                    },
+                });
+                if (keyword_device) {
+                    res.status(200).json({ msg: "deleted", isDleted: true });
+                }
+                else {
+                    res.status(200).json({ msg: "Cannot delete", isDleted: false });
+                }
+            }
+            else {
+                res.status(200).json({ msg: "Cannot delete", isDleted: false });
             }
         }));
     }
