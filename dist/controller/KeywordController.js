@@ -151,7 +151,7 @@ class KeywordController {
             if (keyword_device) {
                 return res
                     .status(200)
-                    .json({ msg: "success", keywords: keyword_device.keyword });
+                    .json({ msg: "success", keywords: keyword_device });
             }
             else {
                 res.status(200).json({ msg: "failure" });
@@ -171,7 +171,7 @@ class KeywordController {
             if (kd) {
                 const keyword_device = yield dataSource_1.prisma.keyword_device.delete({
                     where: {
-                        id: kd.id,
+                        id: kd,
                     },
                 });
                 if (keyword_device) {
