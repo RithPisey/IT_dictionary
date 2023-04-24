@@ -129,7 +129,7 @@ export class KeywordController {
       if (keyword_device) {
         return res
           .status(200)
-          .json({ msg: "success", keywords: keyword_device });
+          .json({ msg: "success", keywords: keyword_device.keyword });
       } else {
         res.status(200).json({ msg: "failure" });
       }
