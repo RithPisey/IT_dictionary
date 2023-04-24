@@ -28,7 +28,7 @@ export class KeywordController {
       if (keywords) {
         return res.status(200).json({ msg: "success", keywords: keywords });
       } else {
-        res.status(500).json({ msg: "failure" });
+        res.status(200).json({ msg: "failure" });
       }
     });
     this._router.post("/set-device-id", async function (req, res) {
@@ -61,13 +61,13 @@ export class KeywordController {
         if (keywords) {
           return res.status(200).json({ msg: "success", keywords: keywords });
         } else {
-          res.status(500).json({ msg: "failure" });
+          res.status(200).json({ msg: "failure" });
         }
       } else {
         if (keywords) {
           return res.status(200).json({ msg: "success", keywords: keywords });
         } else {
-          res.status(500).json({ msg: "failure" });
+          res.status(200).json({ msg: "failure" });
         }
       }
     });
@@ -86,20 +86,21 @@ export class KeywordController {
       if (keyword) {
         return res.status(200).json({ issaved: true });
       } else {
-        return res.status(501).json({ issaved: false });
+        return res.status(200).json({ issaved: false });
       }
     });
     this._router.post("/save-keyword", async function (req, res) {
       const { kid, did } = req.body;
-      const keywords = await prisma.keyword.findUnique({
+      const kd = await prisma.keyword_device.findFirst({
         where: {
-          id: kid,
+          device_id: did,
+          keyword_id: kid,
         },
         select: {
           id: true,
         },
       });
-      if (!keywords) {
+      if (!kd) {
         const keyword_device = await prisma.keyword_device.create({
           data: {
             device_id: did,
@@ -109,10 +110,10 @@ export class KeywordController {
         if (keyword_device) {
           return res.status(200).json({ save: true });
         } else {
-          return res.status(501).json({ fail: false });
+          return res.status(200).json({ fail: false });
         }
       } else {
-        return res.status(501).json({ fail: false });
+        return res.status(200).json({ fail: false });
       }
     });
     this._router.post("/saved-keyword", async (req, res) => {
@@ -130,7 +131,7 @@ export class KeywordController {
           .status(200)
           .json({ msg: "success", keywords: keyword_device });
       } else {
-        res.status(500).json({ msg: "failure" });
+        res.status(200).json({ msg: "failure" });
       }
     });
     this._router.post("/unsaved-keyword", async (req, res) => {
@@ -154,10 +155,10 @@ export class KeywordController {
         if (keyword_device) {
           res.status(200).json({ msg: "deleted", isDleted: true });
         } else {
-          res.status(500).json({ msg: "Cannot delete", isDleted: false });
+          res.status(200).json({ msg: "Cannot delete", isDleted: false });
         }
       } else {
-        res.status(500).json({ msg: "Cannot delete", isDleted: false });
+        res.status(200).json({ msg: "Cannot delete", isDleted: false });
       }
     });
   }
