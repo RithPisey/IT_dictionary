@@ -171,37 +171,7 @@ class KeywordController {
             if (kd) {
                 const keyword_device = yield dataSource_1.prisma.keyword_device.delete({
                     where: {
-                        device_id: did,
-                        keyword_id: kid,
-                    },
-                });
-                if (keyword_device) {
-                    res.status(200).json({ msg: "deleted", isDleted: true });
-                }
-                else {
-                    res.status(200).json({ msg: "Cannot delete", isDleted: false });
-                }
-            }
-            else {
-                res.status(200).json({ msg: "Cannot delete", isDleted: false });
-            }
-        }));
-        this._router.post("/unsave-keyword", (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { kid, did } = req.body;
-            const kd = yield dataSource_1.prisma.keyword_device.findFirst({
-                where: {
-                    device_id: did,
-                    keyword_id: kid,
-                },
-                select: {
-                    id: true,
-                },
-            });
-            if (kd) {
-                const keyword_device = yield dataSource_1.prisma.keyword_device.delete({
-                    where: {
-                        device_id: did,
-                        keyword_id: kid,
+                        id: kd,
                     },
                 });
                 if (keyword_device) {
