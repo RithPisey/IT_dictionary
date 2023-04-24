@@ -86,7 +86,7 @@ export class KeywordController {
       if (keyword) {
         return res.status(200).json({ issaved: true });
       } else {
-        return res.status(200).json({ issaved: false });
+        return res.status(501).json({ issaved: false });
       }
     });
     this._router.post("/save-keyword", async function (req, res) {
