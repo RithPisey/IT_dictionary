@@ -232,7 +232,8 @@ class HomeController {
         return __awaiter(this, void 0, void 0, function* () {
             const { kh_word, eng_word, fr_word, attr, start_letter, res_person, explain, approved_date_by_commitee, desc_by_commitee, final_approve_date_by_council, desc_by_council, } = data;
             let keyword;
-            if (!id) {
+            if (id.length === 0) {
+                console.log("is create");
                 keyword = yield dataSource_1.prisma.keyword.create({
                     data: {
                         keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
@@ -255,6 +256,7 @@ class HomeController {
                 });
             }
             else {
+                console.log("is update");
                 keyword = dataSource_1.prisma.keyword.update({
                     where: { id: parseInt(id === null || id === void 0 ? void 0 : id.toLocaleString()) },
                     data: {

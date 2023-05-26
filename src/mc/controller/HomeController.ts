@@ -262,6 +262,7 @@ export class HomeController {
 		} = data;
 		let keyword;
 		if (id.length === 0) {
+			console.log("is create");
 			keyword = await prisma.keyword.create({
 				data: {
 					keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
@@ -285,6 +286,7 @@ export class HomeController {
 				},
 			});
 		} else {
+			console.log("is update");
 			keyword = prisma.keyword.update({
 				where: { id: parseInt(id?.toLocaleString()) },
 				data: {
