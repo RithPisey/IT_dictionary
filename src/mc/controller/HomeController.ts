@@ -261,7 +261,7 @@ export class HomeController {
 			desc_by_council,
 		} = data;
 		let keyword;
-		if (!id) {
+		if (id.length === 0) {
 			keyword = await prisma.keyword.create({
 				data: {
 					keyword: { eng: eng_word, kh: kh_word, fr: fr_word },
